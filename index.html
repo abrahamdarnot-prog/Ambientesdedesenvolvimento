@@ -3,16 +3,287 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mi Portafolio | Desarrollador Web</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Atmósfera & Ambiente | Galería Visual</title>
+  <style>
+    /* --- VARIABLES Y RESET --- */
+    :root {
+      --bg-color: #0b0f19;
+      --card-bg: #151c2c;
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --accent: #38bdf8;
+      --accent-hover: #0284c7;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      line-height: 1.6;
+    }
+
+    /* --- NAVBAR --- */
+    .navbar {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 8%;
+      background: rgba(11, 15, 25, 0.8);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      z-index: 100;
+    }
+
+    .logo {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 1px;
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 2rem;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text-main);
+      font-size: 0.95rem;
+      transition: color 0.3s;
+    }
+
+    .nav-links a:hover {
+      color: var(--accent);
+    }
+
+    /* --- HERO SECTION --- */
+    .hero {
+      height: 70vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 0 20px;
+      background: radial-gradient(circle at center, #1e293b 0%, var(--bg-color) 70%);
+    }
+
+    .hero-content h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    .highlight {
+      color: var(--accent);
+    }
+
+    .hero-content p {
+      color: var(--text-muted);
+      max-width: 600px;
+      margin: 0 auto 2rem;
+      font-size: 1.1rem;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 0.8rem 1.8rem;
+      background-color: var(--accent);
+      color: #0b0f19;
+      font-weight: 600;
+      text-decoration: none;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.2s, background-color 0.3s;
+    }
+
+    .btn:hover {
+      background-color: var(--accent-hover);
+      color: #fff;
+      transform: translateY(-2px);
+    }
+
+    /* --- GALERÍA DE AMBIENTE (9 IMÁGENES) --- */
+    .gallery-section {
+      padding: 5rem 8%;
+    }
+
+    .gallery-section h2 {
+      text-align: center;
+      font-size: 2.2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: var(--text-muted);
+      margin-bottom: 3rem;
+    }
+
+    .ambient-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    .ambient-card {
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+      aspect-ratio: 4 / 3;
+      background-color: var(--card-bg);
+      cursor: pointer;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+    }
+
+    .ambient-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s ease, filter 0.4s ease;
+    }
+
+    .ambient-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(11, 15, 25, 0.9) 10%, transparent 60%);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 1.5rem;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .ambient-card:hover img {
+      transform: scale(1.08);
+      filter: brightness(0.85);
+    }
+
+    .ambient-card:hover .ambient-overlay {
+      opacity: 1;
+    }
+
+    .ambient-overlay h3 {
+      font-size: 1.2rem;
+      margin-bottom: 0.3rem;
+      color: #fff;
+    }
+
+    .ambient-overlay p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    /* --- CONTACTO --- */
+    .contact {
+      text-align: center;
+      padding: 5rem 20px;
+      background-color: var(--card-bg);
+      margin-top: 2rem;
+    }
+
+    .contact h2 {
+      margin-bottom: 1rem;
+    }
+
+    .contact p {
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+    }
+
+    .hidden {
+      opacity: 0;
+      transition: opacity 0.3s;
+      margin-top: 1rem;
+      color: var(--accent) !important;
+    }
+
+    .visible {
+      opacity: 1;
+    }
+
+    /* --- FOOTER --- */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    /* --- MODAL LIGHTBOX --- */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.9);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      padding: 20px;
+    }
+
+    .lightbox img {
+      max-width: 90%;
+      max-height: 75vh;
+      border-radius: 10px;
+      box-shadow: 0 0 30px rgba(56, 189, 248, 0.2);
+    }
+
+    .lightbox-caption {
+      margin-top: 1rem;
+      text-align: center;
+    }
+
+    .close-lightbox {
+      position: absolute;
+      top: 25px;
+      right: 35px;
+      font-size: 2.5rem;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    /* --- RESPONSIVO --- */
+    @media (max-width: 900px) {
+      .ambient-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .ambient-grid {
+        grid-template-columns: 1fr;
+      }
+      .hero-content h1 {
+        font-size: 2.2rem;
+      }
+    }
+  </style>
 </head>
 <body>
+
   <header>
     <nav class="navbar">
-      <div class="logo"><TuNombre /></div>
+      <div class="logo"><Atmósfera /></div>
       <ul class="nav-links">
         <li><a href="#inicio">Inicio</a></li>
-        <li><a href="#proyectos">Proyectos</a></li>
+        <li><a href="#ambiente">Ambiente</a></li>
         <li><a href="#contacto">Contacto</a></li>
       </ul>
     </nav>
@@ -20,44 +291,126 @@
 
   <section id="inicio" class="hero">
     <div class="hero-content">
-      <h1>Hola, soy <span class="highlight">Tu Nombre</span></h1>
-      <p>Desarrollador web en formación apasionado por crear sitios modernos y funcionales.</p>
-      <a href="#proyectos" class="btn">Ver mis proyectos</a>
+      <h1>Explora el <span class="highlight">Ambiente Visual</span></h1>
+      <p>Una colección curada de 9 atmósferas, luces y texturas diseñadas para inspirar calma y creatividad.</p>
+      <a href="#ambiente" class="btn">Explorar galería</a>
     </div>
   </section>
 
-  <section id="proyectos" class="projects">
-    <h2>Mis Proyectos</h2>
-    <div class="project-grid">
-      <div class="card">
-        <h3>Proyecto 1: Calculadora Web</h3>
-        <p>Una calculadora interactiva construida con HTML, CSS y lógica en JavaScript puro.</p>
-        <a href="#" class="card-link">Ver código →</a>
+  <section id="ambiente" class="gallery-section">
+    <h2>Sugerencias de Ambiente</h2>
+    <p class="subtitle">Haz clic en cualquier imagen para apreciarla en pantalla completa</p>
+
+    <div class="ambient-grid">
+      <!-- Imagen 1 -->
+      <div class="ambient-card" onclick="openLightbox(this)">
+        <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=800&q=80" alt="Bosque con niebla">
+        <div class="ambient-overlay">
+          <h3>01. Niebla Matinal</h3>
+          <p>Silencio y frescura entre pinos antiguos.</p>
+        </div>
       </div>
-      <div class="card">
-        <h3>Proyecto 2: Landing Page</h3>
-        <p>Diseño responsivo adaptado a dispositivos móviles utilizando Flexbox y CSS Grid.</p>
-        <a href="#" class="card-link">Ver código →</a>
+
+      <!-- Imagen 2 -->
+      <div class="ambient-card" onclick="openLightbox(this)">
+        <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80" alt="Atardecer en la costa">
+        <div class="ambient-overlay">
+          <h3>02. Calma Costera</h3>
+          <p>Olas suaves bajo tonos cálidos del horizonte.</p>
+        </div>
       </div>
-      <div class="card">
-        <h3>Proyecto 3: App del Clima</h3>
-        <p>Aplicación que consulta el clima en tiempo real mediante una API externa.</p>
-        <a href="#" class="card-link">Ver código →</a>
+
+      <!-- Imagen 3 -->
+      <div class="ambient-card" onclick="openLightbox(this)">
+        <img src="https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80" alt="Espacio minimalista">
+        <div class="ambient-overlay">
+          <h3>03. Espacio Minimal</h3>
+          <p>Luz natural filtrándose en interiores limpios.</p>
+        </div>
+      </div>
+
+      <!-- Imagen 4 -->
+      <div class="ambient-card" onclick="openLightbox(this)">
+        <img src="https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=800&q=80" alt="Montañas estrelladas">
+        <div class="ambient-overlay">
+          <h3>04. Noche Estrellada</h3>
+          <p>Aire puro y cielos despejados en la cumbre.</p>
+        </div>
+      </div>
+
+      <!-- Imagen 5 -->
+      <div class="ambient-card" onclick="openLightbox(this)">
+        <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=800&q=80" alt="Café acogedor">
+        <div class="ambient-overlay">
+          <h3>05. Rincón de Café</h3>
+          <p>Aroma tostado y calidez en una tarde lluviosa.</p>
+        </div>
+      </div>
+
+      <!-- Imagen 6 -->
+      <div class="ambient-card" onclick="openLightbox(this)">
+        <img src="https://images.unsplash.com/photo-1514565131-fce0801e5785?auto=format&fit=crop&w=800&q=80" alt="Ciudad nocturna">
+        <div class="ambient-overlay">
+          <h3>06. Neón Urbano</h3>
+          <p>Reflejos nocturnos y ritmo metropolitano.</p>
+        </div>
+      </div>
+
+      <!-- Imagen 7 -->
+      <div class="ambient-card" onclick="openLightbox(this)">
+        <img src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=800&q=80" alt="Valle verde">
+        <div class="ambient-overlay">
+          <h3>07. Valle Esmeralda</h3>
+          <p>Naturaleza viva bañada por luz dorada.</p>
+        </div>
+      </div>
+
+      <!-- Imagen 8 -->
+      <div class="ambient-card" onclick="openLightbox(this)">
+        <img src="https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=800&q=80" alt="Setup creativo">
+        <div class="ambient-overlay">
+          <h3>08. Estudio Nocturno</h3>
+          <p>Iluminación tenue ideal para concentración profunda.</p>
+        </div>
+      </div>
+
+      <!-- Imagen 9 -->
+      <div class="ambient-card" onclick="openLightbox(this)">
+        <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80" alt="Horizonte alpino">
+        <div class="ambient-overlay">
+          <h3>09. Horizonte Alpino</h3>
+          <p>Inmensidad y serenidad sobre las nubes.</p>
+        </div>
       </div>
     </div>
   </section>
 
   <section id="contacto" class="contact">
-    <h2>Contacto</h2>
-    <p>¿Quieres trabajar conmigo o saludar? ¡Envíame un mensaje!</p>
-    <button id="contact-btn" class="btn">Copiar mi correo</button>
+    <h2>Conecta con este estilo</h2>
+    <p>¿Te gustaría colaborar en un proyecto visual o recibir más sugerencias?</p>
+    <button id="contact-btn" class="btn">Copiar correo de contacto</button>
     <p id="copy-msg" class="hidden">¡Correo copiado al portapapeles!</p>
   </section>
 
   <footer>
-    <p>Creado con HTML, CSS y JS | 2026</p>
+    <p>Galería Ambiental | Creado con HTML, CSS y JS • 2026</p>
   </footer>
 
-  <script src="script.js"></script>
-</body>
-</html>
+  <!-- Visor Lightbox -->
+  <div id="lightbox" class="lightbox" onclick="closeLightbox(event)">
+    <span class="close-lightbox" onclick="closeLightbox(event)">×</span>
+    <img id="lightbox-img" src="" alt="Vista previa">
+    <div class="lightbox-caption">
+      <h3 id="lightbox-title"></h3>
+      <p id="lightbox-desc" style="color: #94a3b8;"></p>
+    </div>
+  </div>
+
+  <script>
+    // Copiar correo al portapapeles
+    const contactBtn = document.getElementById('contact-btn');
+    const copyMsg = document.getElementById('copy-msg');
+
+    contactBtn.addEventListener('click', () => {
+      navigator.clipboard.writeText('contacto@ambientevisual.com');
+      copyMsg.}
